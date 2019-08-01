@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import { View } from 'react-native';
 import ActivityIndicator from '@ant-design/react-native/lib/activity-indicator';
 import { DashboardPage } from './DashboardPage';
+import { THEMES } from '../constants';
 
 const SplashStyles = styled(View)`
   height: 100vh;
@@ -11,7 +12,7 @@ const SplashStyles = styled(View)`
   justify-content: center;
 `;
 
-const SplashPage = ({}) => {
+const SplashPage = ({ currentTheme }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -22,7 +23,14 @@ const SplashPage = ({}) => {
 
   // cDU, cDM, cWU
   useEffect(() => {
-    const myFakeData = { id: 1, text: 'yo' };
+    // get a response from the API?
+    // e.g. is the thing on or off
+    const myFakeData = [
+      { id: 1, text: 'yo' },
+      { id: 2, text: 'yo' },
+      { id: 3, text: 'yo' },
+      { id: 4, text: 'yo' },
+    ];
     setData(myFakeData);
     setLoading(false);
 
@@ -33,12 +41,15 @@ const SplashPage = ({}) => {
   // no dependencies array = cDU (runs every time)
 
   return (
-    <SplashStyles data-styled="SplashStyles">
+    <SplashStyles
+      style={{ backgroundColor: THEMES[currentTheme].PAGE_BACKGROUND }}
+      data-styled="SplashStyles"
+    >
       {loading ? (
         <ActivityIndicator />
       ) : (
         // DONE!?
-        <DashboardPage {...{ dataArray: [data] }} />
+        <DashboardPage {...{ dataArray: data, currentTheme }} />
       )}
     </SplashStyles>
   );
