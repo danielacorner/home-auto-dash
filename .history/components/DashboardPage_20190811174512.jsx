@@ -39,13 +39,12 @@ const Card = ({ type = CONTROLS.BUTTON, onPress, text, currentTheme }) => {
 
   // useTrail
   // https://www.react-spring.io/docs/hooks/use-trail
-  const springDownTranslateOnEnter = {};
+
   const AnimatedCard = animated(CardStyles);
   return (
     <AnimatedCard
       style={{
-        backgroundColor: THEMES[currentTheme].CARD_BACKGROUND,
-        transform: [springDownTranslateOnEnter]
+        backgroundColor: THEMES[currentTheme].CARD_BACKGROUND
       }}
     >
       <Icon name="highlight" size={64} />
@@ -87,20 +86,26 @@ export const DashboardPage = ({ dataArray, currentTheme }) => {
   });
   return (
     <AnimatedDashStyles style={springVisible}>
-      {trail.map((props, idx) => {
+      {trail.map((translateAnimation, idx) => {
+        console.log(
+          "🌈: DashboardPage -> translateAnimation",
+          translateAnimation
+        );
         const onPress = () => console.log("HEY");
         const type = CONTROLS.BUTTON;
         return (
           // make a function to call on control ... onChange, onPress
-          <Card
-            key={dataArray[idx].id}
-            {...{
-              type,
-              onPress,
-              text: dataArray[idx].text,
-              currentTheme
-            }}
-          />
+          <animated.View style={{ transform: [translateAnimation] }}>
+            <Card
+              key={dataArray[idx].id}
+              {...{
+                type,
+                onPress,
+                text: dataArray[idx].text,
+                currentTheme
+              }}
+            />
+          </animated.View>
         );
       })}
     </AnimatedDashStyles>

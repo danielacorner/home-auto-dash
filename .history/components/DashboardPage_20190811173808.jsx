@@ -34,12 +34,21 @@ const CardStyles = styled(View)`
   }
 `;
 
-const Card = ({ type = CONTROLS.BUTTON, onPress, text, currentTheme }) => {
+const Card = ({
+  type = CONTROLS.BUTTON,
+  onPress,
+  text,
+  currentTheme,
+  numCards
+}) => {
   const { entered, springVisible } = useSpringVisible();
 
   // useTrail
   // https://www.react-spring.io/docs/hooks/use-trail
-  const springDownTranslateOnEnter = {};
+
+  const springDownTranslateOnEnter = useTrail(numCards, {
+    translateY: entered ? 0 : -50
+  });
   const AnimatedCard = animated(CardStyles);
   return (
     <AnimatedCard
@@ -81,24 +90,21 @@ export const DashboardPage = ({ dataArray, currentTheme }) => {
   const { entered, springVisible } = useSpringVisible();
 
   const AnimatedDashStyles = animated(DashStyles);
-
-  const trail = useTrail(dataArray.length, {
-    translateY: entered ? 0 : -50
-  });
   return (
     <AnimatedDashStyles style={springVisible}>
-      {trail.map((props, idx) => {
+      {dataArray.map(({ id, text }, idx) => {
         const onPress = () => console.log("HEY");
         const type = CONTROLS.BUTTON;
         return (
           // make a function to call on control ... onChange, onPress
           <Card
-            key={dataArray[idx].id}
+            key={id}
             {...{
               type,
               onPress,
-              text: dataArray[idx].text,
-              currentTheme
+              text,
+              currentTheme,
+              numCards: dataArray.length
             }}
           />
         );

@@ -3,17 +3,7 @@ import styled from "styled-components/native";
 import { View, Text, Button } from "react-native";
 import { THEMES } from "../constants";
 import { Icon } from "react-native-elements";
-import { animated, useSpring, useTrail } from "react-spring/native";
-
-const useSpringVisible = () => {
-  const [entered, setEntered] = useState(false);
-  const springVisible = useSpring({ opacity: entered ? 1 : 0 });
-  // set entered on mount
-  useEffect(() => {
-    setEntered(true);
-  }, []);
-  return { entered, springVisible };
-};
+import { animated, useSpring } from "react-spring/native";
 
 const CustomControl = ({ onPress, title, className }) => (
   <Button {...{ title, onPress, className }} />
@@ -34,12 +24,16 @@ const CardStyles = styled(View)`
   }
 `;
 
-const Card = ({ type = CONTROLS.BUTTON, onPress, text, currentTheme }) => {
-  const { entered, springVisible } = useSpringVisible();
-
-  // useTrail
-  // https://www.react-spring.io/docs/hooks/use-trail
-  const springDownTranslateOnEnter = {};
+const Card = ({
+  type = CONTROLS.BUTTON,
+  onPress,
+  text,
+  currentTheme,
+  isEntered
+}) => {
+  const springDownTranslateOnEnter = useSpring({
+    translateY: isEntered ? 0 : -50
+  });
   const AnimatedCard = animated(CardStyles);
   return (
     <AnimatedCard
@@ -67,6 +61,16 @@ const DashStyles = styled(View)`
   width: 100%;
 `;
 
+const useSpringVisible = () => {
+  const [entered, setEntered] = useState(false);
+  const springVisible = useSpring({ opacity: entered ? 1 : 0 });
+  // set entered on mount
+  useEffect(() => {
+    setEntered(true);
+  }, []);
+  return { entered, springVisible };
+};
+
 // ? once we have the API data, create a type map for custom controls
 export const DashboardPage = ({ dataArray, currentTheme }) => {
   fetch("https://my-json-server.typicode.com/elomt/demo/components")
@@ -81,24 +85,21 @@ export const DashboardPage = ({ dataArray, currentTheme }) => {
   const { entered, springVisible } = useSpringVisible();
 
   const AnimatedDashStyles = animated(DashStyles);
-
-  const trail = useTrail(dataArray.length, {
-    translateY: entered ? 0 : -50
-  });
   return (
     <AnimatedDashStyles style={springVisible}>
-      {trail.map((props, idx) => {
+      {dataArray.map(({ id, text }, idx) => {
         const onPress = () => console.log("HEY");
         const type = CONTROLS.BUTTON;
         return (
           // make a function to call on control ... onChange, onPress
           <Card
-            key={dataArray[idx].id}
+            key={id}
             {...{
               type,
               onPress,
-              text: dataArray[idx].text,
-              currentTheme
+              text,
+              currentTheme,
+              isEntered
             }}
           />
         );

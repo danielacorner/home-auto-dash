@@ -39,7 +39,7 @@ const Card = ({ type = CONTROLS.BUTTON, onPress, text, currentTheme }) => {
 
   // useTrail
   // https://www.react-spring.io/docs/hooks/use-trail
-  const springDownTranslateOnEnter = {};
+
   const AnimatedCard = animated(CardStyles);
   return (
     <AnimatedCard

@@ -37,15 +37,10 @@ const CardStyles = styled(View)`
 const Card = ({ type = CONTROLS.BUTTON, onPress, text, currentTheme }) => {
   const { entered, springVisible } = useSpringVisible();
 
-  // useTrail
-  // https://www.react-spring.io/docs/hooks/use-trail
-  const springDownTranslateOnEnter = {};
-  const AnimatedCard = animated(CardStyles);
   return (
-    <AnimatedCard
+    <Card
       style={{
-        backgroundColor: THEMES[currentTheme].CARD_BACKGROUND,
-        transform: [springDownTranslateOnEnter]
+        backgroundColor: THEMES[currentTheme].CARD_BACKGROUND
       }}
     >
       <Icon name="highlight" size={64} />
@@ -54,7 +49,7 @@ const Card = ({ type = CONTROLS.BUTTON, onPress, text, currentTheme }) => {
         className="control"
         {...{ type, onPress, title: "howdydo" }}
       />
-    </AnimatedCard>
+    </Card>
   );
 };
 // text + icon + [control];
@@ -72,10 +67,6 @@ export const DashboardPage = ({ dataArray, currentTheme }) => {
   fetch("https://my-json-server.typicode.com/elomt/demo/components")
     .then(data => data.json())
     .then(data => {
-      // whether you think you can,
-      // or you think you can't,
-      // you're right
-
       console.log("🌈: DashboardPage -> data", data);
     });
   const { entered, springVisible } = useSpringVisible();
@@ -85,22 +76,29 @@ export const DashboardPage = ({ dataArray, currentTheme }) => {
   const trail = useTrail(dataArray.length, {
     translateY: entered ? 0 : -50
   });
+
   return (
     <AnimatedDashStyles style={springVisible}>
-      {trail.map((props, idx) => {
+      {trail.map((translateAnimation, idx) => {
+        console.log(
+          "🌈: DashboardPage -> translateAnimation",
+          translateAnimation
+        );
         const onPress = () => console.log("HEY");
         const type = CONTROLS.BUTTON;
         return (
           // make a function to call on control ... onChange, onPress
-          <Card
-            key={dataArray[idx].id}
-            {...{
-              type,
-              onPress,
-              text: dataArray[idx].text,
-              currentTheme
-            }}
-          />
+          <animated.View style={{ transform: [translateAnimation] }}>
+            <Card
+              key={dataArray[idx].id}
+              {...{
+                type,
+                onPress,
+                text: dataArray[idx].text,
+                currentTheme
+              }}
+            />
+          </animated.View>
         );
       })}
     </AnimatedDashStyles>

@@ -10,7 +10,9 @@ const useSpringVisible = () => {
   const springVisible = useSpring({ opacity: entered ? 1 : 0 });
   // set entered on mount
   useEffect(() => {
-    setEntered(true);
+    if (!entered) {
+      setEntered(true);
+    }
   }, []);
   return { entered, springVisible };
 };
@@ -35,17 +37,13 @@ const CardStyles = styled(View)`
 `;
 
 const Card = ({ type = CONTROLS.BUTTON, onPress, text, currentTheme }) => {
-  const { entered, springVisible } = useSpringVisible();
-
-  // useTrail
-  // https://www.react-spring.io/docs/hooks/use-trail
-  const springDownTranslateOnEnter = {};
-  const AnimatedCard = animated(CardStyles);
+  console.log("🌈: Card -> currentTheme", currentTheme);
+  console.log("🌈: Card -> THEMES", THEMES);
+  console.log("🌈: Card -> THEMES", THEMES[currentTheme]);
   return (
-    <AnimatedCard
+    <Card
       style={{
-        backgroundColor: THEMES[currentTheme].CARD_BACKGROUND,
-        transform: [springDownTranslateOnEnter]
+        backgroundColor: THEMES[currentTheme].CARD_BACKGROUND
       }}
     >
       <Icon name="highlight" size={64} />
@@ -54,7 +52,7 @@ const Card = ({ type = CONTROLS.BUTTON, onPress, text, currentTheme }) => {
         className="control"
         {...{ type, onPress, title: "howdydo" }}
       />
-    </AnimatedCard>
+    </Card>
   );
 };
 // text + icon + [control];
@@ -85,22 +83,31 @@ export const DashboardPage = ({ dataArray, currentTheme }) => {
   const trail = useTrail(dataArray.length, {
     translateY: entered ? 0 : -50
   });
+
+  // useTrail
+  // https://www.react-spring.io/docs/hooks/use-trail
+
+  const AnimatedCardWrapper = animated(View);
   return (
     <AnimatedDashStyles style={springVisible}>
-      {trail.map((props, idx) => {
+      {trail.map((translateAnimation, idx) => {
         const onPress = () => console.log("HEY");
         const type = CONTROLS.BUTTON;
         return (
           // make a function to call on control ... onChange, onPress
-          <Card
+          <AnimatedCardWrapper
             key={dataArray[idx].id}
-            {...{
-              type,
-              onPress,
-              text: dataArray[idx].text,
-              currentTheme
-            }}
-          />
+            style={{ transform: [translateAnimation] }}
+          >
+            <Card
+              {...{
+                type,
+                onPress,
+                text: dataArray[idx].text,
+                currentTheme
+              }}
+            />
+          </AnimatedCardWrapper>
         );
       })}
     </AnimatedDashStyles>
