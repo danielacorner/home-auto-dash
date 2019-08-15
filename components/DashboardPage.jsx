@@ -1,63 +1,9 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components/native";
-import { View, Text, Button } from "react-native";
-import { THEMES } from "../constants";
-import { Icon } from "react-native-elements";
-import { animated, useSpring, useTrail } from "react-spring/native";
-
-const useSpringVisible = () => {
-  const [entered, setEntered] = useState(false);
-  const springVisible = useSpring({ opacity: entered ? 1 : 0 });
-  // set entered on mount
-  useEffect(() => {
-    setEntered(true);
-  }, []);
-  return { entered, springVisible };
-};
-
-const CustomControl = ({ onPress, title, className }) => (
-  <Button {...{ title, onPress, className }} />
-);
-
-const CONTROLS = {
-  BUTTON: "button"
-};
-
-const CardStyles = styled(View)`
-  margin: 16px;
-  width: 200;
-  height: 200;
-  border-radius: 16px;
-  padding: 30px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.16);
-  .control {
-  }
-`;
-
-const Card = ({ type = CONTROLS.BUTTON, onPress, text, currentTheme }) => {
-  const { entered, springVisible } = useSpringVisible();
-
-  // useTrail
-  // https://www.react-spring.io/docs/hooks/use-trail
-  const springDownTranslateOnEnter = {};
-  const AnimatedCard = animated(CardStyles);
-  return (
-    <AnimatedCard
-      style={{
-        backgroundColor: THEMES[currentTheme].CARD_BACKGROUND,
-        transform: [springDownTranslateOnEnter]
-      }}
-    >
-      <Icon name="highlight" size={64} />
-      <Text>{text}</Text>
-      <CustomControl
-        className="control"
-        {...{ type, onPress, title: "howdydo" }}
-      />
-    </AnimatedCard>
-  );
-};
-// text + icon + [control];
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components/native';
+import { View } from 'react-native';
+import { animated, useTrail } from 'react-spring/native';
+import { ControlCard } from './ControlCard';
+import { CONTROLS } from '../constants';
 
 const DashStyles = styled(View)`
   display: flex;
@@ -67,39 +13,58 @@ const DashStyles = styled(View)`
   width: 100%;
 `;
 
+// I CANT EVEN SEE U IN CHAT
+// weirdo
+
 // ? once we have the API data, create a type map for custom controls
 export const DashboardPage = ({ dataArray, currentTheme }) => {
-  fetch("https://my-json-server.typicode.com/elomt/demo/components")
-    .then(data => data.json())
-    .then(data => {
-      // whether you think you can,
-      // or you think you can't,
-      // you're right
-
-      console.log("🌈: DashboardPage -> data", data);
-    });
-  const { entered, springVisible } = useSpringVisible();
-
   const AnimatedDashStyles = animated(DashStyles);
+  // useState for mounted, setMounted (false)
+  const [mounted, setMounted] = useState(false);
 
-  const trail = useTrail(dataArray.length, {
-    translateY: entered ? 0 : -50
+  // useEffect, deps [] (useMount) => setMounted(true)
+
+  // cDM cDU cWU                // (cWM is DEPRECATED!!!)
+  useEffect(() => {
+    if (dataArray.length > 0) {
+      // if we mount BEFORE we have data,
+      // the transform is pre-applied
+      // so we wait for data first...
+      // deps: [dataArray] = "re-run every time dataArray changes"
+      setMounted(!mounted);
+    }
+    return () => {
+      // cleanup
+    };
+  }, [dataArray]);
+
+  // https://www.react-spring.io/docs/hooks/use-trail
+  // DONE TODO: useTrail
+  const transformsTrail = useTrail(dataArray.length, {
+    scale: mounted ? 1 : 0,
+    translateY: mounted ? 0 : -150,
+    config: {
+      tension: 350,
+      clamp: false,
+      friction: 26,
+      mass: 1.5,
+    },
   });
+  // const stylesTrail = useTrail(dataArray.length, { })
+
   return (
-    <AnimatedDashStyles style={springVisible}>
-      {trail.map((props, idx) => {
-        const onPress = () => console.log("HEY");
+    <AnimatedDashStyles>
+      {transformsTrail.map((styleProps, idx) => {
         const type = CONTROLS.BUTTON;
         return (
           // make a function to call on control ... onChange, onPress
-          <Card
+          <ControlCard
             key={dataArray[idx].id}
-            {...{
-              type,
-              onPress,
-              text: dataArray[idx].text,
-              currentTheme
-            }}
+            type={type}
+            text={dataArray[idx].name}
+            currentTheme={currentTheme}
+            styleProps={styleProps}
+            icon={dataArray[idx].icon}
           />
         );
       })}

@@ -13,7 +13,7 @@ const SplashStyles = styled(View)`
 `;
 
 const SplashPage = ({ currentTheme }) => {
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // useEffect to fetch data, set data, set loading
@@ -23,17 +23,19 @@ const SplashPage = ({ currentTheme }) => {
 
   // cDU, cDM, cWU
   useEffect(() => {
+    // fetch from dummy API
+    fetch("https://my-json-server.typicode.com/elomt/demo/components")
+      .then(data => data.json())
+      .then(data => {
+      console.log("⚡🚨: SplashPage -> data", data)
+        // whether you think you can,
+        // or you think you can't,
+        // you're right
+        setData(data);
+      });
     // get a response from the API?
     // e.g. is the thing on or off
-    const myFakeData = [
-      { id: 1, text: 'yo' },
-      { id: 2, text: 'yo' },
-      { id: 3, text: 'yo' },
-      { id: 4, text: 'yo' },
-    ];
-    setData(myFakeData);
     setLoading(false);
-
     return () => {
       // cleanup / teardown / unmount
     };
