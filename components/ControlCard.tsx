@@ -4,70 +4,12 @@ import { CONTROLS, ICON_NAME_MAP } from '../constants';
 import { animated, useSpring } from 'react-spring/native';
 import { Icon } from 'react-native-elements';
 import React, { useState } from 'react';
+import { ToggleIndicator } from './ToggleIndicator';
 
-const mapObjectToArrayOfObjects = obj =>
+export const mapObjectToArrayOfObjects = obj =>
   Object.entries(obj).map(([key, val]) => {
     return { [key]: val };
   });
-
-// TOGGLE INDICATOR
-const TOGGLE_WIDTH = 150;
-const ToggleContainer = styled(View)`
-  overflow: hidden;
-  border-radius: 4px;
-  height: 40px;
-  width: ${TOGGLE_WIDTH / 2}px;
-  margin-top: 1em;
-`;
-const FlexStyles = styled(View)`
-  height: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-`;
-const MiddleSwitch = styled(View)`
-  height: 100%;
-  min-width: ${TOGGLE_WIDTH * 0.2}px;
-  background: hsla(0, 0%, 97%, 1);
-  border-radius: 4px;
-  box-shadow: 0px 0px 7px #00000057;
-`;
-const TextOn = styled(Text)`
-  min-width: ${TOGGLE_WIDTH * 0.4}px;
-  background-color: hsla(120, 70%, 65%, 1);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-const TextOff = styled(Text)`
-  min-width: ${TOGGLE_WIDTH * 0.4}px;
-  background-color: hsla(0, 0%, 75%, 1);
-  color: hsla(0, 0%, 10%, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-type ToggleIndicatorProps = { active: boolean };
-
-export const ToggleIndicator = ({ active }: ToggleIndicatorProps) => {
-  const springLeftRight = useSpring({
-    translateX: active ? TOGGLE_WIDTH * 0.5 : -TOGGLE_WIDTH * 0.5,
-  });
-
-  return (
-    <ToggleContainer>
-      <FlexStyles
-        style={{ transform: mapObjectToArrayOfObjects(springLeftRight) }}
-      >
-        <TextOn>On</TextOn>
-        <MiddleSwitch />
-        <TextOff> Off</TextOff>
-      </FlexStyles>
-    </ToggleContainer>
-  );
-};
 
 const CardStyles = styled(View)`
   margin: 16px;
