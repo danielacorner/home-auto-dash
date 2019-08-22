@@ -18,4 +18,12 @@ export const API_URL = 'https://showme.com/';
 
 export const ICON_NAME_MAP = {
   bulb: 'highlight',
+  thermostat: 'highlight',
+  switch: 'highlight',
+  stereo: 'highlight',
+  tv: 'highlight',
+  sensor: 'highlight',
+  unknown: 'highlight',
 };
+
+// https://dribbble.com/shots/6150068-Dashboard-for-home-automation-app

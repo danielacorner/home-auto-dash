@@ -4,8 +4,9 @@ https://dribbble.com/shots/6150068-Dashboard-for-home-automation-app
 1. set up the back end yo
 2. dashboard:
   z. turn the button into a full-card 'switch' (toggle)
+    a. nice toggle animation
   zz. map of icons (https://material.io/resources/icons/?style=baseline)
   a. tabs (rooms)
   b. bottom-nav
   c. account, settings menus (useAuth by Swizec!)
-    i. side menu
+    i. side menu 
