@@ -4,7 +4,7 @@ import { CONTROLS, ICON_NAME_MAP } from '../constants';
 import { animated, useSpring } from 'react-spring/native';
 import { Icon } from 'react-native-elements';
 import React, { useState } from 'react';
-import { ToggleIndicator } from './ToggleIndicator';
+import { ToggleIndicator, TOGGLE_WIDTH } from './ToggleIndicator';
 
 export const mapObjectToArrayOfObjects = obj =>
   Object.entries(obj).map(([key, val]) => {
@@ -88,6 +88,10 @@ export const ControlCard = ({
     // add a CSS transition
     // Play: set transform: none;
   };
+  const springLeftRight = useSpring({
+    translateX: active ? TOGGLE_WIDTH * 0.25 : -TOGGLE_WIDTH * 0.25,
+    config: { tension: 1000, mass: 2, friction: 10 },
+  });
 
   return (
     <TouchableHighlight onPress={handlePress} underlayColor={'hsla(0,0%,0%,0)'}>
@@ -135,7 +139,7 @@ export const ControlCard = ({
           <Icon name={ICON_NAME_MAP[icon]} size={72} />
         </AnimatedView>
         <Text>{text}</Text>
-        <ToggleIndicator active={active} />
+        <ToggleIndicator spring={springLeftRight} />
       </AnimatedCard>
     </TouchableHighlight>
   );

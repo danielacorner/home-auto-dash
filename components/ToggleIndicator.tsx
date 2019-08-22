@@ -1,11 +1,10 @@
 import styled from 'styled-components/native';
 import { View, Text } from 'react-native';
 import React from 'react';
-import { animated, useSpring } from 'react-spring/native';
-import { mapObjectToArrayOfObjects } from './ControlCard';
+import { animated } from 'react-spring/native';
 
 // TOGGLE INDICATOR
-const TOGGLE_WIDTH = 150;
+export const TOGGLE_WIDTH = 150;
 const ToggleContainer = styled(View)`
   overflow: hidden;
   background: white;
@@ -46,16 +45,12 @@ const TextOff = styled(Text)`
 
 const AnimatedFlexStyles = animated(FlexStyles);
 
-type ToggleIndicatorProps = { active: boolean };
+type ToggleIndicatorProps = { spring: any };
 
-export const ToggleIndicator = ({ active }: ToggleIndicatorProps) => {
-  const springLeftRight = useSpring({
-    translateX: active ? TOGGLE_WIDTH * 0.25 : -TOGGLE_WIDTH * 0.25,
-  });
-
+export const ToggleIndicator = ({ spring }: ToggleIndicatorProps) => {
   return (
     <ToggleContainer>
-      <AnimatedFlexStyles style={{ transform: [springLeftRight] }}>
+      <AnimatedFlexStyles style={{ transform: [spring] }}>
         <TextOn>On</TextOn>
         <MiddleSwitch />
         <TextOff> Off</TextOff>
