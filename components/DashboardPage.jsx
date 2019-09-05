@@ -13,8 +13,7 @@ const DashStyles = styled(View)`
   width: 100%;
 `;
 
-// I CANT EVEN SEE U IN CHAT
-// weirdo
+// TODO: create express server skeleton
 
 // ? once we have the API data, create a type map for custom controls
 export const DashboardPage = ({ dataArray, currentTheme }) => {

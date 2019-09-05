@@ -5,6 +5,7 @@ import { animated, useSpring } from 'react-spring/native';
 import { Icon } from 'react-native-elements';
 import React, { useState } from 'react';
 import { ToggleIndicator, TOGGLE_WIDTH } from './ToggleIndicator';
+import { postData } from '../utils/apiCalls';
 
 export const mapObjectToArrayOfObjects = obj =>
   Object.entries(obj).map(([key, val]) => {
@@ -68,10 +69,17 @@ export const ControlCard = ({
     config: { tension: 125, clamp: true, mass: 0.5, friction: 10 },
   });
 
-  const handlePress = () => {
+  const handlePress = async () => {
     setIsBeingPressed(!isBeingPressed);
-
     setActive(!active);
+
+    // const isOn
+    console.log('⚡🚨: handlePress -> process.env', process.env);
+    const REACT_APP_SERVER_URL = 'http://localhost:8080';
+    const response = await postData(`${REACT_APP_SERVER_URL}/lights`, {
+      state: 'on',
+    });
+    console.log('⚡🚨: handlePress -> response', response);
 
     // setTimeout(() => {
     //   setIsBeingPressed(false);
