@@ -10,20 +10,19 @@ export const THEMES = {
   },
 };
 
-export const CONTROLS = {
-  BUTTON: 'button',
+export const API_TYPES = {
+  bulb: { icon: 'highlight' },
+  speaker: {
+    icon: 'speaker',
+  },
+  light_switch: { icon: 'highlight' },
+  motion_sensor: { icon: 'highlight' },
+  thermostat: { icon: 'highlight' },
+  switch: { icon: 'highlight' },
+  unknown: { icon: 'highlight' },
+  TV: { icon: 'tv' },
 };
 
 export const API_URL = 'https://showme.com/';
-
-export const ICON_NAME_MAP = {
-  bulb: 'highlight',
-  thermostat: 'highlight',
-  switch: 'highlight',
-  stereo: 'highlight',
-  tv: 'highlight',
-  sensor: 'highlight',
-  unknown: 'highlight',
-};
 
 // https://dribbble.com/shots/6150068-Dashboard-for-home-automation-app

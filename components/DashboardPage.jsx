@@ -3,7 +3,6 @@ import styled from 'styled-components/native';
 import { View } from 'react-native';
 import { animated, useTrail } from 'react-spring/native';
 import { ControlCard } from './ControlCard';
-import { CONTROLS } from '../constants';
 
 const DashStyles = styled(View)`
   display: flex;
@@ -54,16 +53,16 @@ export const DashboardPage = ({ dataArray, currentTheme }) => {
   return (
     <AnimatedDashStyles>
       {transformsTrail.map((styleProps, idx) => {
-        const type = CONTROLS.BUTTON;
+        const card = dataArray[idx];
         return (
           // make a function to call on control ... onChange, onPress
           <ControlCard
-            key={dataArray[idx].id}
-            type={type}
-            text={dataArray[idx].name}
+            key={card.id}
+            type={card.type}
+            text={card.name}
             currentTheme={currentTheme}
             styleProps={styleProps}
-            icon={dataArray[idx].icon}
+            icon={card.icon}
           />
         );
       })}
